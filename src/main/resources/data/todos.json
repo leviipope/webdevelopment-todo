@@ -1,7 +1,20 @@
 [
-  { "title": "Learn Spring Boot", "completed": false },
-  { "title": "Build a TODO app", "completed": false },
-  { "title": "Test API endpoints", "completed": true },
-  { "title": "Connect to H2 database", "completed": true },
-  { "title": "Take a coffee break", "completed": false }
+  {
+    "title": "Learn Spring Boot",
+    "description": "Complete the basics of Spring Boot",
+    "completed": false,
+    "user": { "id": 1 }
+  },
+  {
+    "title": "Build REST API",
+    "description": "Create a RESTful API for the todo app",
+    "completed": false,
+    "user": { "id": 1 }
+  },
+  {
+    "title": "Add Security",
+    "description": "Implement authentication and authorization",
+    "completed": false,
+    "user": { "id": 2 }
+  }
 ]
