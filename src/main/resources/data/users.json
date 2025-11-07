@@ -1,12 +1,12 @@
 [
   {
     "username": "john",
-    "password": "$2a$12$fY3RO7bTRKRoZTCOw/ypZuxvtpoEqYQ5mqYxJwfdMLl1MjMUBEmP.",
+    "password": "$2a$12$XjXK.koZCN77fiOspK9jjOwcXzJG8GExaOkqmlA0GwhZF8U8MNv6a",
     "role": "USER"
   },
   {
     "username": "jane",
-    "password": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi",
+    "password": "$2a$12$Cx4EtTOcLpbso4TCAYp7BeM4WHLbVpocHdCBOPpq./O7E62raUvTW",
     "role": "USER"
   },
   {
