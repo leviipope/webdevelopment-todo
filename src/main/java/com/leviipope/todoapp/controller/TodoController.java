@@ -5,6 +5,7 @@ import com.leviipope.todoapp.model.Todo;
 import com.leviipope.todoapp.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -37,11 +38,21 @@ public class TodoController {
 
     }
 
-    // DOESNT WORK!     Get all todos (admin only - we'll add security annotation later)
+    // Get all todos (admin)
     @GetMapping("/all")
-    public ResponseEntity<List<Todo>> getAllTodos() {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<TodoResponse>> getAllTodos() {
         List<Todo> todos = todoService.getAllTodos();
-        return ResponseEntity.ok(todos);
+        List<TodoResponse> response = todos.stream()
+                .map(todo -> new TodoResponse(
+                        todo.getId(),
+                        todo.getTitle(),
+                        todo.getDescription(),
+                        todo.isCompleted(),
+                        todo.getUser().getId()
+                ))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
     }
 
     // Create a new todo for the current user

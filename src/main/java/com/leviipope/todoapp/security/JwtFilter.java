@@ -12,9 +12,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.Collections;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -45,11 +48,13 @@ public class JwtFilter extends OncePerRequestFilter {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (tokenService.validateToken(token, userDetails)) {
+                String role = tokenService.extractClaim(token, claims -> claims.get("role", String.class));
+
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,
-                                userDetails.getAuthorities()
+                                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
                         );
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

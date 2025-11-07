@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import com.leviipope.todoapp.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -51,9 +52,10 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username) {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        claims.put("role", user.getRole());
+        return createToken(claims, user.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

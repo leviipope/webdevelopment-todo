@@ -34,18 +34,11 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
 
-        System.out.println("User found. Checking password...");
-        System.out.println("Raw password: " + loginRequest.getPassword());
-        System.out.println("Encoded password from DB: " + user.getPassword());
-
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
 
-        System.out.println("Login successful for: " + user.getUsername());
-
-
-        String token = jwtUtil.generateToken(user.getUsername());
+        String token = jwtUtil.generateToken(user);
         return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getRole()));
     }
 }
