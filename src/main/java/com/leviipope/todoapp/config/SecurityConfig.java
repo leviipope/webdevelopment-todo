@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             response.setStatus(403);
                             response.setContentType("text/html");
-                            response.getWriter().write("<h1>Sorry no access</h1>");
+                            response.getWriter().write("<h1>Sorry your not admin, no access for you</h1>");
                         })
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
