@@ -1,0 +1,7 @@
+[
+  { "title": "Learn Spring Boot", "completed": false },
+  { "title": "Build a TODO app", "completed": false },
+  { "title": "Test API endpoints", "completed": true },
+  { "title": "Connect to H2 database", "completed": true },
+  { "title": "Take a coffee break", "completed": false }
+]
