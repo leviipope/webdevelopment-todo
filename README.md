@@ -7,7 +7,7 @@ A Spring Boot REST API for managing todos with JWT authentication and role-based
 - 1:N relationship between users and todos
 - JWT-based authentication
 - Role-based access control (ADMIN/USER)
-- CRUD operations for todos
+- CRUD operations for todos and users
 - H2 database
 - BCrypt password encoding
 

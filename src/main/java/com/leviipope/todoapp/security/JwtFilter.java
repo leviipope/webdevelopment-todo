@@ -39,9 +39,10 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-            
+
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
+            System.out.println("No Authorization header or invalid format");
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,24 +50,31 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = header.substring(7);
         String username = tokenService.extractUsername(token);
 
+        System.out.println("JWT Filter - Username from token: " + username);
+        System.out.println("JWT Filter - Request URI: " + request.getRequestURI());
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            try {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                System.out.println("JWT Filter - User found in database: " + userDetails.getUsername());
 
-            if (tokenService.validateToken(token, userDetails)) {
-                String role = tokenService.extractClaim(token, claims -> claims.get("role", String.class));
+                if (tokenService.validateToken(token, userDetails)) {
+                    System.out.println("JWT Filter - Token is valid");
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
-                        );
-
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContext context = SecurityContextHolder.createEmptyContext();
-                context.setAuthentication(authentication);
-                SecurityContextHolder.setContext(context);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    System.out.println("JWT Filter - Token validation failed");
+                }
+            } catch (Exception e) {
+                System.out.println("JWT Filter - Error loading user: " + e.getMessage());
             }
         }
 

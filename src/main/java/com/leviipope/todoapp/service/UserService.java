@@ -1,5 +1,6 @@
 package com.leviipope.todoapp.service;
 
+import com.leviipope.todoapp.dto.UpdateUserRequest;
 import com.leviipope.todoapp.model.User;
 import com.leviipope.todoapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,36 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User updateCurrentUser(String currentUsername, UpdateUserRequest request) {
+        User user = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Update username if provided and different
+        if (request.getUsername() != null && !request.getUsername().isBlank()) {
+            // Check if new username is already taken by another user
+            if (!request.getUsername().equals(currentUsername) &&
+                    userRepository.findByUsername(request.getUsername()).isPresent()) {
+                throw new RuntimeException("Username already exists");
+            }
+            user.setUsername(request.getUsername());
+        }
+
+        // Update password if provided
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        return userRepository.save(user);
+    }
+
+
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public void deleteCurrentUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.delete(user);
     }
 }
