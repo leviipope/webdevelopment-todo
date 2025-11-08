@@ -79,20 +79,40 @@
 
     document.getElementById('addTodoForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const title = document.getElementById('todoTitle').value;
-        const description = document.getElementById('todoDescription').value;
+        const title = document.getElementById('todoTitle').value.trim();
+        const description = document.getElementById('todoDescription').value.trim();
 
-        await fetch('/api/todos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ title, description, completed: false })
-        });
+        if (!title) {
+            alert('Title is required');
+            return;
+        }
 
-        document.getElementById('addTodoForm').reset();
-        loadTodos();
+        try {
+            const response = await fetch('/api/todos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ title, description, completed: false })
+            });
+
+            if (response.status === 401) {
+                alert('Session expired. Please login again.');
+                logout();
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error('Failed to create todo');
+            }
+
+            document.getElementById('addTodoForm').reset();
+            loadTodos();
+        } catch (error) {
+            console.error('Error creating todo:', error);
+            alert('Failed to create todo');
+        }
     });
 
     document.getElementById('editTodoForm').addEventListener('submit', async (e) => {
