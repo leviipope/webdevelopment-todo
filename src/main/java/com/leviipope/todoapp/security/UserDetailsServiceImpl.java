@@ -1,4 +1,4 @@
-package com.leviipope.todoapp.service;
+package com.leviipope.todoapp.security;
 
 import com.leviipope.todoapp.model.User;
 import com.leviipope.todoapp.repository.UserRepository;
@@ -8,11 +8,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

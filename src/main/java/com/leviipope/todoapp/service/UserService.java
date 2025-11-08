@@ -3,7 +3,6 @@ package com.leviipope.todoapp.service;
 import com.leviipope.todoapp.dto.UserCredentialsRequest;
 import com.leviipope.todoapp.model.User;
 import com.leviipope.todoapp.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +11,27 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    public final UserRepository userRepository;
+    public final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public User createUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if (user.getId() == null || user.getRole().isBlank()) {
+            user.setRole("ROLE_USER");
+        }
+
+        return userRepository.save(user);
+    }
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -30,10 +45,6 @@ public class UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
-    }
-
-    public User save(User user) {
-        return userRepository.save(user);
     }
 
     public User updateUser(Long id, User userDetails) {
@@ -73,7 +84,6 @@ public class UserService {
 
         return userRepository.save(user);
     }
-
 
     public void deleteById(Long id) {
         userRepository.deleteById(id);
