@@ -1,6 +1,5 @@
-package com.leviipope.todoapp.config;
+package com.leviipope.todoapp.security;
 
-import com.leviipope.todoapp.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

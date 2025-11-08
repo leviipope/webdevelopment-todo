@@ -1,11 +1,9 @@
-package com.leviipope.todoapp.config;
+package com.leviipope.todoapp.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leviipope.todoapp.model.Todo;
 import com.leviipope.todoapp.model.User;
-import com.leviipope.todoapp.repository.TodoRepository;
-import com.leviipope.todoapp.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 

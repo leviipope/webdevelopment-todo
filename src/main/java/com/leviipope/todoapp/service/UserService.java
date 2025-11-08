@@ -1,6 +1,6 @@
 package com.leviipope.todoapp.service;
 
-import com.leviipope.todoapp.dto.UpdateUserRequest;
+import com.leviipope.todoapp.dto.UserCredentialsRequest;
 import com.leviipope.todoapp.model.User;
 import com.leviipope.todoapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateCurrentUser(String currentUsername, UpdateUserRequest request) {
+    public User updateCurrentUser(String currentUsername, UserCredentialsRequest request) {
         User user = userRepository.findByUsername(currentUsername)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

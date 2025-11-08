@@ -1,8 +1,8 @@
 package com.leviipope.todoapp.controller;
 
-import com.leviipope.todoapp.config.JwtUtil;
+import com.leviipope.todoapp.security.JwtUtil;
 import com.leviipope.todoapp.dto.LoginResponse;
-import com.leviipope.todoapp.dto.UpdateUserRequest;
+import com.leviipope.todoapp.dto.UserCredentialsRequest;
 import com.leviipope.todoapp.model.User;
 import com.leviipope.todoapp.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -28,11 +28,11 @@ public class ProfileController {
     @PutMapping
     public ResponseEntity<?> updateCurrentUser(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody UpdateUserRequest request) {
+            @RequestBody UserCredentialsRequest request) {
         try {
             User updatedUser = userService.updateCurrentUser(userDetails.getUsername(), request);
 
-            // If username was changed, generate a new token
+            // If the username was changed, generate a new token
             if (request.getUsername() != null && !request.getUsername().equals(userDetails.getUsername())) {
                 String newToken = jwtUtil.generateToken(updatedUser);
                 return ResponseEntity.ok(new LoginResponse(newToken, updatedUser.getUsername(), updatedUser.getRole()));

@@ -1,7 +1,7 @@
 package com.leviipope.todoapp.controller;
 
-import com.leviipope.todoapp.config.JwtUtil;
-import com.leviipope.todoapp.dto.LoginRequest;
+import com.leviipope.todoapp.security.JwtUtil;
+import com.leviipope.todoapp.dto.UserCredentialsRequest;
 import com.leviipope.todoapp.dto.LoginResponse;
 import com.leviipope.todoapp.model.User;
 import com.leviipope.todoapp.service.UserService;
@@ -25,7 +25,7 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody UserCredentialsRequest loginRequest) {
         System.out.println("Login attempt for username: " + loginRequest.getUsername());
 
         User user = userService.findByUsername(loginRequest.getUsername());

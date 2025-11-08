@@ -13,7 +13,6 @@ A Spring Boot REST API for managing todos with JWT authentication and role-based
 
 ## Technológiák
 
-- Java
 - Spring Boot
 - Spring Security
 - Spring Data JPA

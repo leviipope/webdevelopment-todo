@@ -1,6 +1,6 @@
 package com.leviipope.todoapp.dto;
 
-public class LoginRequest {
+public class UserCredentialsRequest {
     private String username;
     private String password;
 
