@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - User Management</title>
+</head>
+<body>
+<!-- Login Section -->
+<div id="loginSection">
+    <h1>Admin Login</h1>
+    <form id="loginForm">
+        <label>Username: <input type="text" id="loginUsername" required></label><br>
+        <label>Password: <input type="password" id="loginPassword" required></label><br>
+        <button type="submit">Login</button>
+    </form>
+    <p id="loginError"></p>
+</div>
+
+<!-- Admin Section -->
+<div id="adminSection" style="display: none;">
+    <h1>User Management</h1>
+    <p>Welcome, <strong id="currentUsername"></strong> <button onclick="logout()">Logout</button></p>
+
+    <h2>Create User</h2>
+    <form id="createUserForm">
+        <label>Username: <input type="text" id="createUsername" required></label><br>
+        <label>Password: <input type="password" id="createPassword" required></label><br>
+        <label>Role:
+            <select id="createRole">
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+            </select>
+        </label><br>
+        <button type="submit">Create User</button>
+    </form>
+
+    <h2>All Users</h2>
+    <div id="userList"></div>
+
+    <!-- Edit Form -->
+    <div id="editSection" style="display: none;">
+        <h2>Edit User</h2>
+        <form id="editUserForm">
+            <input type="hidden" id="editUserId">
+            <label>Username: <input type="text" id="editUsername" required></label><br>
+            <label>Password: <input type="password" id="editPassword" placeholder="Leave blank to keep current"></label><br>
+            <label>Role:
+                <select id="editRole">
+                    <option value="USER">USER</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select>
+            </label><br>
+            <button type="submit">Save</button>
+            <button type="button" onclick="cancelEdit()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let token = localStorage.getItem('token');
+    let username = localStorage.getItem('username');
+
+    if (token) {
+        showAdminSection();
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const usernameInput = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: usernameInput, password })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Login response:', data); // Debug log
+
+            // Check if user has admin role
+            if (!data.role || !data.role.includes('ADMIN')) {
+                document.getElementById('loginError').textContent = 'Admin access required';
+                return;
+            }
+            token = data.token;
+            username = data.username;
+            localStorage.setItem('token', token);
+            localStorage.setItem('username', username);
+            localStorage.setItem('role', data.role); // Store role
+            showAdminSection();
+        } else {
+            document.getElementById('loginError').textContent = 'Invalid credentials';
+        }
+    });
+
+    document.getElementById('createUserForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('createUsername').value;
+        const password = document.getElementById('createPassword').value;
+        const role = document.getElementById('createRole').value;
+
+        const response = await fetch('/api/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ username, password, role })
+        });
+
+        if (response.ok) {
+            document.getElementById('createUserForm').reset();
+            loadUsers();
+        } else {
+            const error = await response.text();
+            alert(error);
+        }
+    });
+
+    document.getElementById('editUserForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('editUserId').value;
+        const username = document.getElementById('editUsername').value;
+        const password = document.getElementById('editPassword').value;
+        const role = document.getElementById('editRole').value;
+
+        const body = { username, role };
+        if (password && password.trim() !== '') {
+            body.password = password;
+        }
+
+        await fetch(`/api/users/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(body)
+        });
+
+        cancelEdit();
+        loadUsers();
+    });
+
+    async function loadUsers() {
+        const response = await fetch('/api/users', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            alert('Failed to load users');
+            return;
+        }
+
+        const users = await response.json();
+        document.getElementById('userList').innerHTML = users.map(user => `
+                <div>
+                    <p><strong>${user.username}</strong> (${user.role})</p>
+                    <p>ID: ${user.id}</p>
+                    <button onclick="editUser(${user.id})">Edit</button>
+                    <button onclick="deleteUser(${user.id})">Delete</button>
+                    <hr>
+                </div>
+            `).join('');
+    }
+
+    async function editUser(id) {
+        const response = await fetch(`/api/users/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const user = await response.json();
+
+        document.getElementById('editUserId').value = user.id;
+        document.getElementById('editUsername').value = user.username;
+        document.getElementById('editPassword').value = '';
+        document.getElementById('editRole').value = user.role;
+        document.getElementById('editSection').style.display = 'block';
+    }
+
+    function cancelEdit() {
+        document.getElementById('editSection').style.display = 'none';
+    }
+
+    async function deleteUser(id) {
+        if (!confirm('Delete this user?')) return;
+
+        await fetch(`/api/users/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        loadUsers();
+    }
+
+    function showAdminSection() {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminSection').style.display = 'block';
+        document.getElementById('currentUsername').textContent = username;
+        loadUsers();
+    }
+
+    function logout() {
+        localStorage.clear();
+        location.reload();
+    }
+</script>
+</body>
+</html>
