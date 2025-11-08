@@ -4,7 +4,6 @@ import com.leviipope.todoapp.model.Todo;
 import com.leviipope.todoapp.model.User;
 import com.leviipope.todoapp.repository.TodoRepository;
 import com.leviipope.todoapp.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,31 +13,50 @@ import java.util.List;
 @Service
 public class TodoService {
 
-    @Autowired
-    private TodoRepository todoRepository;
+    private final UserRepository userRepository;
+    private final TodoRepository todoRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public TodoService(UserRepository userRepository, TodoRepository todoRepository) {
+        this.userRepository = userRepository;
+        this.todoRepository = todoRepository;
+    }
 
-    // Get all todos for a specific user by username
+    private User findUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        "User not found: " + username
+                ));
+    }
+
+    private void verifyTodoOwnership(Todo todo, User user) {
+        if (!todo.getUser().getId().equals(user.getId())) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "You don't have permission to access this todo"
+            );
+        }
+    }
+
+    // Get todos for the currently logged-in user
     public List<Todo> getTodosByUsername(String username) {
         User user = findUserByUsername(username);
         return todoRepository.findByUser(user);
     }
 
-    // Get all todos (for admin purposes)
+    // Get all todos (admin)
     public List<Todo> getAllTodos() {
         return todoRepository.findAll();
     }
 
-    // Create a new todo for a specific user
+    // Create a new todo for the current user
     public Todo createTodoForUsername(Todo todo, String username) {
         User user = findUserByUsername(username);
         todo.setUser(user);
         return todoRepository.save(todo);
     }
 
-    // Get a single todo by ID, ensuring it belongs to the user
+    // Get single todo by id (only if it belongs to current user)
     public Todo getTodoByIdAndUsername(Long id, String username) {
         User user = findUserByUsername(username);
         Todo todo = todoRepository.findById(id)
@@ -47,18 +65,12 @@ public class TodoService {
                         "Todo not found with id: " + id
                 ));
 
-        // Verify the todo belongs to this user
-        if (!todo.getUser().getId().equals(user.getId())) {
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    "You don't have permission to access this todo"
-            );
-        }
+        verifyTodoOwnership(todo, user);
 
         return todo;
     }
 
-    // Update a todo, ensuring it belongs to the user
+    // Update existing todo (only if it belongs to current user)
     public Todo updateTodoForUsername(Long id, Todo updatedTodo, String username) {
         User user = findUserByUsername(username);
         Todo existingTodo = todoRepository.findById(id)
@@ -67,15 +79,8 @@ public class TodoService {
                         "Todo not found with id: " + id
                 ));
 
-        // Verify the todo belongs to this user
-        if (!existingTodo.getUser().getId().equals(user.getId())) {
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    "You don't have permission to modify this todo"
-            );
-        }
+        verifyTodoOwnership(existingTodo, user);
 
-        // Update fields
         existingTodo.setTitle(updatedTodo.getTitle());
         existingTodo.setDescription(updatedTodo.getDescription());
         existingTodo.setCompleted(updatedTodo.isCompleted());
@@ -83,7 +88,7 @@ public class TodoService {
         return todoRepository.save(existingTodo);
     }
 
-    // Delete a todo, ensuring it belongs to the user
+    // Delete todo (only if it belongs to current user)
     public void deleteTodoForUsername(Long id, String username) {
         User user = findUserByUsername(username);
         Todo todo = todoRepository.findById(id)
@@ -92,23 +97,8 @@ public class TodoService {
                         "Todo not found with id: " + id
                 ));
 
-        // Verify the todo belongs to this user
-        if (!todo.getUser().getId().equals(user.getId())) {
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    "You don't have permission to delete this todo"
-            );
-        }
+        verifyTodoOwnership(todo, user);
 
         todoRepository.delete(todo);
-    }
-
-    // Helper method to find user by username with proper error handling
-    private User findUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED,
-                        "User not found: " + username
-                ));
     }
 }
