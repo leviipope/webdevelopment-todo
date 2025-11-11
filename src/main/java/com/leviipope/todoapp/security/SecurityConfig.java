@@ -31,7 +31,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/index.html","/admin.html","/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/index.html", "/", "/admin.html", "/*.css", "/*.js").permitAll()
                         .requestMatchers("/h2/**").hasRole("ADMIN")
                         .requestMatchers("/api/todos/**").authenticated()
                         .anyRequest().authenticated()

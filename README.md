@@ -11,7 +11,7 @@ A Spring Boot REST API for managing todos with JWT authentication and role-based
 - H2 database
 - BCrypt password encoding
 
-## Technológiák
+## Technologies
 
 - Spring Boot
 - Spring Security

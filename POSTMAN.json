@@ -1,0 +1,3517 @@
+{
+	"info": {
+		"_postman_id": "5decd745-fc4a-4649-89cd-4899c7318edc",
+		"name": "Todo App API Tests for John user (Full functionality test)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49839064",
+		"_collection_link": "https://leviipope-385df223-5389776.postman.co/workspace/leviipope's-Workspace~ed15ade6-63c0-4fe9-8bde-ee16706bc8d5/collection/49839064-5decd745-fc4a-4649-89cd-4899c7318edc?action=share&source=collection_link&creator=49839064"
+	},
+	"item": [
+		{
+			"name": "Negative Tests",
+			"item": [
+				{
+					"name": "John login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('john');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"john\",\n  \"password\": \"john\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "John wrong password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 401', function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"john\",\n  \"password\": \"wrongpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "John wrong username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 401', function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"wrongusername\",\n  \"password\": \"john\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get todo by Id of other user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 401', function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update todo by Id of other user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 401', function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Updated Todo Title\",\r\n    \"description\": \"Updated description\",\r\n    \"completed\": true\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete todo by Id for other user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 401', function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 403', function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newuser\",\r\n  \"password\": \"newuser\",\r\n  \"role\": \"ROLE_USER\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new admin user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 403', function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newadmin\",\r\n  \"password\": \"newadmin\",\r\n  \"role\": \"ROLE_admin\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 403', function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 403', function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users by username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 403', function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/u/jane",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"u",
+								"jane"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 403', function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"updated\",\r\n  \"password\": \"updated\",\r\n  \"role\": \"USER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 403', function () {",
+									"    pm.response.to.have.status(403);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('admin');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user as admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newuser\",\r\n  \"password\": \"newuser\",\r\n  \"role\": \"ROLE_USER\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new admin user as admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newadmin\",\r\n  \"password\": \"newadmin\",\r\n  \"role\": \"ROLE_admin\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create same user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newuser\",\r\n  \"password\": \"newuser\",\r\n  \"role\": \"ROLE_USER\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create same user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newadmin\",\r\n  \"password\": \"newadmin\",\r\n  \"role\": \"ROLE_admin\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Positive Tests",
+			"item": [
+				{
+					"name": "John login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('john');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"john\",\n  \"password\": \"john\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all todos current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new todo current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status | code is 200 or 201', function () {",
+									"    pm.expect(pm.response.code, 'Unexpected status code').to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Pre-request: Ensure collection variable 'token' exists; warn if missing but allow request to proceed",
+									"(function () {",
+									"    try {",
+									"        const token = pm.collectionVariables.get('token');",
+									"        if (!token) {",
+									"            // Soft warning; do not block execution",
+									"            console.warn(\"Warning: collection variable 'token' is not set. Request will proceed without a token unless provided via environment or request-level variables.\");",
+									"        }",
+									"    } catch (e) {",
+									"        console.warn('Pre-request check failed: ' + e.message);",
+									"    }",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"My First Todo\",\r\n    \"description\": \"This is a test todo\",\r\n    \"completed\": false\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get todo by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.expect(pm.response.code).to.eql(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update todo by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.expect(pm.response.code).to.eql(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Updated Todo Title\",\r\n    \"description\": \"Updated description\",\r\n    \"completed\": true\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete todo by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 204', function () {",
+									"  pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user profile (current user) Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is success (2xx/3xx)', function () {\r",
+									"  pm.expect(pm.response.code).to.be.within(200, 399);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"updated\",\r\n  \"password\": \"updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updated login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"updated\",\n  \"password\": \"updated\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (current user)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newuser\",\r\n  \"password\": \"newuser\",\r\n  \"role\": \"ROLE_USER\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new admin user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newadmin\",\r\n  \"password\": \"newadmin\",\r\n  \"role\": \"ROLE_admin\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Positive Tests Thoughout",
+			"item": [
+				{
+					"name": "John login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('john');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"john\",\n  \"password\": \"john\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all todos current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate response status is 200",
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Validate response is valid JSON array",
+									"let json;",
+									"pm.test('Response is valid JSON', function () {",
+									"    pm.expect(function () {",
+									"        json = pm.response.json();",
+									"    }).to.not.throw();",
+									"});",
+									"",
+									"pm.test('Response body is an array', function () {",
+									"    pm.expect(Array.isArray(json)).to.be.true;",
+									"});",
+									"",
+									"// Validate each item has required shape and types",
+									"pm.test('Each todo has required fields with correct types', function () {",
+									"    json.forEach((item, idx) => {",
+									"        pm.expect(item, `Item at index ${idx} should be an object`).to.be.an('object');",
+									"        pm.expect(item).to.have.property('id');",
+									"        pm.expect(item.id, `id at index ${idx}`).to.be.a('number');",
+									"",
+									"        pm.expect(item).to.have.property('title');",
+									"        pm.expect(item.title, `title at index ${idx}`).to.be.a('string');",
+									"        pm.expect(item.title.trim().length, `title at index ${idx} should be non-empty`).to.be.above(0);",
+									"",
+									"        pm.expect(item).to.have.property('description');",
+									"        pm.expect(item.description, `description at index ${idx}`).to.be.a('string');",
+									"",
+									"        pm.expect(item).to.have.property('completed');",
+									"        pm.expect(item.completed, `completed at index ${idx}`).to.be.a('boolean');",
+									"",
+									"        pm.expect(item).to.have.property('userId');",
+									"        pm.expect(item.userId, `userId at index ${idx}`).to.be.a('number');",
+									"    });",
+									"});",
+									"",
+									"// Validate Content-Type header includes application/json",
+									"pm.test(\"Content-Type includes 'application/json'\", function () {",
+									"    pm.response.to.have.header('Content-Type');",
+									"    const ct = pm.response.headers.get('Content-Type');",
+									"    pm.expect(ct.toLowerCase()).to.include('application/json');",
+									"});",
+									"",
+									"// If collection variable 'token' exists, ensure Authorization header was sent and non-empty",
+									"pm.test(\"If collection variable 'token' exists, Authorization header was sent and non-empty\", function () {",
+									"    const token = pm.collectionVariables.get('token');",
+									"    if (typeof token !== 'undefined' && token !== null) {",
+									"        const authHeader = pm.request.headers.get('Authorization');",
+									"        pm.expect(authHeader, 'Authorization header should be present when token exists').to.be.a('string');",
+									"        pm.expect(authHeader.trim().length, 'Authorization header should be non-empty').to.be.above(0);",
+									"    } else {",
+									"        pm.expect(true).to.be.true; // no-op when token not defined",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new todo current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Enhanced post-response tests for Create new todo current user",
+									"// References: Requests \"Create new todo (current user)\" and \"Create new todo current user\"",
+									"",
+									"(function () {",
+									"    let jsonData;",
+									"    const requestBody = (function getRequestBody() {",
+									"        try {",
+									"            if (pm.request.body && pm.request.body.mode === 'raw' && pm.request.body.raw) {",
+									"                return JSON.parse(pm.request.body.raw);",
+									"            }",
+									"        } catch (e) {",
+									"            // If request body can't be parsed, continue with undefined",
+									"        }",
+									"        return undefined;",
+									"    })();",
+									"",
+									"    // 1) Status code is 200 or 201",
+									"    pm.test('Status | code is 200 or 201', function () {",
+									"        pm.expect(pm.response.code, 'Unexpected status code').to.be.oneOf([200, 201]);",
+									"    });",
+									"",
+									"    // 5a) Header: Content-Type includes application/json",
+									"    pm.test('Headers | Content-Type includes application/json', function () {",
+									"        pm.response.to.have.header('Content-Type');",
+									"        const ct = pm.response.headers.get('Content-Type');",
+									"        pm.expect(String(ct).toLowerCase(), 'Content-Type not JSON').to.include('application/json');",
+									"    });",
+									"",
+									"    // Parse JSON safely once for reuse",
+									"    pm.test('Body | response is valid JSON', function () {",
+									"        try {",
+									"            jsonData = pm.response.json();",
+									"            pm.expect(jsonData, 'Response JSON is empty').to.exist;",
+									"        } catch (e) {",
+									"            pm.expect.fail('Response body is not valid JSON: ' + e.message);",
+									"        }",
+									"    });",
+									"",
+									"    // 2) Validate schema and values",
+									"    pm.test('Body | has required properties with correct types', function () {",
+									"        pm.expect(jsonData, 'jsonData not parsed').to.exist;",
+									"        const required = {",
+									"            id: 'number',",
+									"            title: 'string',",
+									"            description: 'string',",
+									"            completed: 'boolean',",
+									"            userId: 'number'",
+									"        };",
+									"        Object.keys(required).forEach(function (k) {",
+									"            pm.expect(jsonData, 'Missing property: ' + k).to.have.property(k);",
+									"            pm.expect(typeof jsonData[k], 'Type mismatch for ' + k).to.eql(required[k]);",
+									"        });",
+									"    });",
+									"",
+									"    pm.test('Body | values match request for title/description/completed', function () {",
+									"        pm.expect(jsonData, 'jsonData not parsed').to.exist;",
+									"        if (requestBody) {",
+									"            ['title', 'description', 'completed'].forEach(function (k) {",
+									"                if (k in requestBody) {",
+									"                    pm.expect(jsonData[k], 'Mismatch for ' + k).to.eql(requestBody[k]);",
+									"                }",
+									"            });",
+									"        } else {",
+									"            pm.expect(true, 'Request body unavailable to compare values').to.be.true;",
+									"        }",
+									"    });",
+									"",
+									"    // 3) Optional token handling",
+									"    pm.test('Auth | token handling (optional)', function () {",
+									"        pm.expect(jsonData, 'jsonData not parsed').to.exist;",
+									"        if (jsonData && Object.prototype.hasOwnProperty.call(jsonData, 'token')) {",
+									"            pm.expect(jsonData.token, 'Token present but empty').to.exist;",
+									"            pm.collectionVariables.set('token', jsonData.token);",
+									"        } else {",
+									"            // Not present is acceptable for this endpoint",
+									"            pm.expect(true, 'Token not present in response (optional)').to.be.true;",
+									"        }",
+									"    });",
+									"",
+									"    // 4) Optional username handling",
+									"    pm.test(\"User | username equals 'john' when present (optional)\", function () {",
+									"        pm.expect(jsonData, 'jsonData not parsed').to.exist;",
+									"        if (jsonData && Object.prototype.hasOwnProperty.call(jsonData, 'username')) {",
+									"            pm.expect(jsonData.username, 'Username mismatch').to.eql('john');",
+									"            pm.collectionVariables.set('username', jsonData.username);",
+									"        } else {",
+									"            pm.expect(true, 'Username not present in response (optional)').to.be.true;",
+									"        }",
+									"    });",
+									"",
+									"    // 5b) Response time threshold",
+									"    pm.test('Performance | response time < 200ms', function () {",
+									"        pm.expect(pm.response.responseTime, 'Response too slow').to.be.below(200);",
+									"    });",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Pre-request: Ensure collection variable 'token' exists; warn if missing but allow request to proceed",
+									"(function () {",
+									"    try {",
+									"        const token = pm.collectionVariables.get('token');",
+									"        if (!token) {",
+									"            // Soft warning; do not block execution",
+									"            console.warn(\"Warning: collection variable 'token' is not set. Request will proceed without a token unless provided via environment or request-level variables.\");",
+									"        }",
+									"    } catch (e) {",
+									"        console.warn('Pre-request check failed: ' + e.message);",
+									"    }",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"My First Todo\",\r\n    \"description\": \"This is a test todo\",\r\n    \"completed\": false\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get todo by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse response safely",
+									"let jsonData = null;",
+									"",
+									"pm.test('Response is JSON or non-JSON gracefully handled', function () {",
+									"    try {",
+									"        jsonData = pm.response.json();",
+									"        pm.expect(typeof jsonData).to.be.oneOf(['object', 'array']);",
+									"    } catch (e) {",
+									"        jsonData = null; // non-JSON response",
+									"        pm.expect(pm.response.text(), 'Non-JSON response should still be readable').to.be.a('string');",
+									"    }",
+									"});",
+									"",
+									"// Basic response status/content-type checks",
+									"pm.test('Status code is 200', function () {",
+									"    pm.expect(pm.response.code).to.eql(200);",
+									"});",
+									"",
+									"pm.test('Has Content-Type header', function () {",
+									"    pm.response.to.have.header('Content-Type');",
+									"});",
+									"",
+									"// Field-level assertions only if JSON body is present",
+									"pm.test('Validate todo payload shape (when JSON)', function () {",
+									"    if (!jsonData) {",
+									"        pm.expect(jsonData, 'JSON body expected for this endpoint in success cases').to.not.equal(null);",
+									"        return; // prevent further checks on non-JSON",
+									"    }",
+									"",
+									"    // id can be number or string",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData.id).to.satisfy(v => typeof v === 'number' || typeof v === 'string');",
+									"",
+									"    // title is string",
+									"    pm.expect(jsonData).to.have.property('title');",
+									"    pm.expect(jsonData.title).to.be.a('string');",
+									"",
+									"    // description is string (based on known success response)",
+									"    pm.expect(jsonData).to.have.property('description');",
+									"    pm.expect(jsonData.description).to.be.a('string');",
+									"",
+									"    // completed is boolean or 0/1",
+									"    pm.expect(jsonData).to.have.property('completed');",
+									"    pm.expect(typeof jsonData.completed === 'boolean' || jsonData.completed === 0 || jsonData.completed === 1).to.be.true;",
+									"",
+									"    // userId is number (based on known success response)",
+									"    pm.expect(jsonData).to.have.property('userId');",
+									"    pm.expect(jsonData.userId).to.satisfy(v => typeof v === 'number' || typeof v === 'string');",
+									"});",
+									"",
+									"// Username is optional (keep original intent but skip if not present)",
+									"pm.test('Username is optional and correct when present', function () {",
+									"    if (jsonData && Object.prototype.hasOwnProperty.call(jsonData, 'username')) {",
+									"        pm.expect(jsonData.username).to.eql('testuser');",
+									"    } else {",
+									"        pm.expect(true, 'username not present (optional)').to.be.true;",
+									"    }",
+									"});",
+									"",
+									"// Token handling (kept from existing tests)",
+									"pm.test('Response contains token and save to collection variable when present', function () {",
+									"    if (jsonData && jsonData.token) {",
+									"        pm.expect(jsonData.token).to.exist;",
+									"        pm.collectionVariables.set('token', jsonData.token);",
+									"    } else {",
+									"        pm.expect(jsonData ? jsonData.token : undefined, 'token optional for this endpoint').to.be.oneOf([undefined, null]);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update todo by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse response safely",
+									"let jsonData = null;",
+									"",
+									"pm.test('Response is JSON or non-JSON gracefully handled', function () {",
+									"    try {",
+									"        jsonData = pm.response.json();",
+									"        pm.expect(typeof jsonData).to.be.oneOf(['object', 'array']);",
+									"    } catch (e) {",
+									"        jsonData = null; // non-JSON response",
+									"        pm.expect(pm.response.text(), 'Non-JSON response should still be readable').to.be.a('string');",
+									"    }",
+									"});",
+									"",
+									"// Basic response status/content-type checks",
+									"pm.test('Status code is 200', function () {",
+									"    pm.expect(pm.response.code).to.eql(200);",
+									"});",
+									"",
+									"pm.test('Has Content-Type header', function () {",
+									"    pm.response.to.have.header('Content-Type');",
+									"});",
+									"",
+									"// Field-level assertions only if JSON body is present",
+									"pm.test('Validate todo payload shape (when JSON)', function () {",
+									"    if (!jsonData) {",
+									"        pm.expect(jsonData, 'JSON body expected for this endpoint in success cases').to.not.equal(null);",
+									"        return; // prevent further checks on non-JSON",
+									"    }",
+									"",
+									"    // id can be number or string",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData.id).to.satisfy(v => typeof v === 'number' || typeof v === 'string');",
+									"",
+									"    // title is string",
+									"    pm.expect(jsonData).to.have.property('title');",
+									"    pm.expect(jsonData.title).to.be.a('string');",
+									"",
+									"    // description is string (based on known success response)",
+									"    pm.expect(jsonData).to.have.property('description');",
+									"    pm.expect(jsonData.description).to.be.a('string');",
+									"",
+									"    // completed is boolean or 0/1",
+									"    pm.expect(jsonData).to.have.property('completed');",
+									"    pm.expect(typeof jsonData.completed === 'boolean' || jsonData.completed === 0 || jsonData.completed === 1).to.be.true;",
+									"",
+									"    // userId is number or string",
+									"    pm.expect(jsonData).to.have.property('userId');",
+									"    pm.expect(jsonData.userId).to.satisfy(v => typeof v === 'number' || typeof v === 'string');",
+									"});",
+									"",
+									"// Username is optional (keep original intent but skip if not present)",
+									"pm.test('Username is optional and correct when present', function () {",
+									"    if (jsonData && Object.prototype.hasOwnProperty.call(jsonData, 'username')) {",
+									"        pm.expect(jsonData.username).to.eql('testuser');",
+									"    } else {",
+									"        pm.expect(true, 'username not present (optional)').to.be.true;",
+									"    }",
+									"});",
+									"",
+									"// Token handling (kept from existing tests)",
+									"pm.test('Response contains token and save to collection variable when present', function () {",
+									"    if (jsonData && jsonData.token) {",
+									"        pm.expect(jsonData.token).to.exist;",
+									"        pm.collectionVariables.set('token', jsonData.token);",
+									"    } else {",
+									"        pm.expect(jsonData ? jsonData.token : undefined, 'token optional for this endpoint').to.be.oneOf([undefined, null]);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Updated Todo Title\",\r\n    \"description\": \"Updated description\",\r\n    \"completed\": true\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete todo by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Safely parse JSON once",
+									"let jsonData = null;",
+									"try {",
+									"  jsonData = pm.response.json();",
+									"} catch (e) {",
+									"  // non-JSON response, leave jsonData as null",
+									"}",
+									"",
+									"// Basic status test",
+									"pm.test('Status code is 204', function () {",
+									"  pm.response.to.have.status(204);",
+									"});",
+									"",
+									"// Token handling (if token exists in response)",
+									"pm.test('Token handling (if provided)', function () {",
+									"  if (jsonData && typeof jsonData === 'object' && 'token' in jsonData) {",
+									"    pm.expect(jsonData.token, 'token should exist when provided').to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"  } else {",
+									"    pm.expect(true, 'no token in response, skipping').to.be.true;",
+									"  }",
+									"});",
+									"",
+									"// Optional username check (skip if not present)",
+									"pm.test('Username matches when provided', function () {",
+									"  if (jsonData && typeof jsonData === 'object' && 'username' in jsonData) {",
+									"    pm.expect(jsonData.username).to.eql('testuser');",
+									"  } else {",
+									"    pm.expect(true, 'no username in response, skipping').to.be.true;",
+									"  }",
+									"});",
+									"",
+									"// Validate common success shape when JSON body exists",
+									"pm.test('Response body fields (when JSON body exists)', function () {",
+									"  if (jsonData && typeof jsonData === 'object') {",
+									"    // These checks only run if keys exist, to avoid false negatives on empty bodies",
+									"    if ('id' in jsonData) pm.expect(jsonData.id).to.be.a('number');",
+									"    if ('title' in jsonData) pm.expect(jsonData.title).to.be.a('string');",
+									"    if ('description' in jsonData) pm.expect(jsonData.description).to.be.a('string');",
+									"    if ('completed' in jsonData) pm.expect(jsonData.completed).to.be.a('boolean');",
+									"    if ('userId' in jsonData) pm.expect(jsonData.userId).to.be.a('number');",
+									"  } else {",
+									"    pm.expect(true, 'non-JSON or empty body, skipping body field checks').to.be.true;",
+									"  }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user profile (current user) Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse JSON safely\r",
+									"let jsonData = null;\r",
+									"try {\r",
+									"  jsonData = pm.response.json();\r",
+									"} catch (e) {\r",
+									"  jsonData = null; // non-JSON\r",
+									"}\r",
+									"\r",
+									"// Status code categories\r",
+									"pm.test('Status is success (2xx/3xx)', function () {\r",
+									"  pm.expect(pm.response.code).to.be.within(200, 399);\r",
+									"});\r",
+									"\r",
+									"// Strict success (200) when it happens\r",
+									"pm.test('Status code is 200 (when success)', function () {\r",
+									"  if (pm.response.code === 200) {\r",
+									"    pm.response.to.have.status(200);\r",
+									"  } else {\r",
+									"    pm.expect(true, 'not a 200 response, skipping').to.be.true;\r",
+									"  }\r",
+									"});\r",
+									"\r",
+									"// Content-Type sanity\r",
+									"pm.test('Content-Type is JSON when body is JSON', function () {\r",
+									"  if (jsonData !== null) {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type') || '').to.match(/application\\/json/i);\r",
+									"  } else {\r",
+									"    pm.expect(true, 'non-JSON body, skipping').to.be.true;\r",
+									"  }\r",
+									"});\r",
+									"\r",
+									"// Token handling (if token is returned)\r",
+									"pm.test('Token handling (optional)', function () {\r",
+									"  if (jsonData && typeof jsonData === 'object' && 'token' in jsonData) {\r",
+									"    pm.expect(jsonData.token, 'token should be a non-empty string').to.be.a('string').and.not.empty;\r",
+									"    pm.collectionVariables.set('token', jsonData.token);\r",
+									"  } else {\r",
+									"    pm.expect(true, 'no token returned, skipping').to.be.true;\r",
+									"  }\r",
+									"});\r",
+									"\r",
+									"// Validate common success shape for profile update\r",
+									"pm.test('Response body has expected fields (when JSON)', function () {\r",
+									"  if (jsonData && typeof jsonData === 'object') {\r",
+									"    // Typical fields for a profile or a resource (adjusts if present)\r",
+									"    if ('id' in jsonData) pm.expect(jsonData.id).to.be.a('number');\r",
+									"    if ('title' in jsonData) pm.expect(jsonData.title).to.be.a('string');\r",
+									"    if ('description' in jsonData) pm.expect(jsonData.description).to.be.a('string');\r",
+									"    if ('completed' in jsonData) pm.expect(jsonData.completed).to.be.a('boolean');\r",
+									"    if ('userId' in jsonData) pm.expect(jsonData.userId).to.be.a('number');\r",
+									"\r",
+									"    // Optional username check: only if present\r",
+									"    if ('username' in jsonData) {\r",
+									"      pm.expect(jsonData.username, 'username should be a non-empty string').to.be.a('string').and.not.empty;\r",
+									"    }\r",
+									"  } else {\r",
+									"    pm.expect(true, 'non-JSON or empty body; skipping body validations').to.be.true;\r",
+									"  }\r",
+									"});\r",
+									"\r",
+									"// Negative path hints (only assert shape when corresponding status appears)\r",
+									"pm.test('401 Unauthorized shape (if 401)', function () {\r",
+									"  if (pm.response.code === 401) {\r",
+									"    pm.expect(pm.response.headers.get('WWW-Authenticate') || true, 'WWW-Authenticate header may be present').to.exist;\r",
+									"    if (jsonData) {\r",
+									"      if ('message' in jsonData) pm.expect(jsonData.message).to.be.a('string');\r",
+									"      if ('error' in jsonData) pm.expect(jsonData.error).to.be.a('string');\r",
+									"    }\r",
+									"  } else {\r",
+									"    pm.expect(true, 'not 401; skipping').to.be.true;\r",
+									"  }\r",
+									"});\r",
+									"\r",
+									"pm.test('400/422 Validation error shape (if validation fails)', function () {\r",
+									"  if ([400, 422].includes(pm.response.code)) {\r",
+									"    if (jsonData) {\r",
+									"      // common patterns: message, errors, details\r",
+									"      if ('message' in jsonData) pm.expect(jsonData.message).to.be.a('string');\r",
+									"      if ('errors' in jsonData) pm.expect(jsonData.errors).to.be.an('array');\r",
+									"      if ('details' in jsonData) pm.expect(jsonData.details).to.be.an('object');\r",
+									"    }\r",
+									"  } else {\r",
+									"    pm.expect(true, 'not 400/422; skipping').to.be.true;\r",
+									"  }\r",
+									"});\r",
+									"\r",
+									"// Response time\r",
+									"pm.test('Response time < 1000 ms', function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"// Headers sanity checks\r",
+									"pm.test('Has server date header', function () {\r",
+									"  pm.expect(pm.response.headers.get('Date') || pm.response.headers.get('date')).to.exist;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"updated\",\r\n  \"password\": \"updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updated login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Safely parse JSON once",
+									"let jsonData = null;",
+									"try {",
+									"  jsonData = pm.response.json();",
+									"} catch (e) {",
+									"  jsonData = null; // non-JSON",
+									"}",
+									"",
+									"// Status 200",
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Token present and store",
+									"pm.test('Response contains token', function () {",
+									"  pm.expect(jsonData, 'response must be JSON to read token').to.be.an('object');",
+									"  pm.expect(jsonData.token).to.exist;",
+									"  pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"// Username matches expected for this request",
+									"pm.test('Response contains username', function () {",
+									"  pm.expect(jsonData, 'response must be JSON to read username').to.be.an('object');",
+									"  pm.expect(jsonData.username).to.eql('updated'); // adjusted from 'jane'",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"updated\",\n  \"password\": \"updated\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (current user)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Safely parse JSON once (DELETE returns plain text in this API)",
+									"let jsonData = null;",
+									"try {",
+									"  jsonData = pm.response.json();",
+									"} catch (e) {",
+									"  jsonData = null; // non-JSON/plain text",
+									"}",
+									"",
+									"// Status 200",
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Body content check for this DELETE",
+									"pm.test('Returns expected success message', function () {",
+									"  const bodyText = pm.response.text();",
+									"  pm.expect(bodyText).to.match(/Account deleted successfully/i);",
+									"});",
+									"",
+									"// Token handling (optional, only if JSON with token is returned)",
+									"pm.test('Token handling (optional)', function () {",
+									"  if (jsonData && typeof jsonData === 'object' && 'token' in jsonData) {",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"  } else {",
+									"    pm.expect(true, 'no token in response, skipping').to.be.true;",
+									"  }",
+									"});",
+									"",
+									"// Username check (optional, only if JSON has username)",
+									"pm.test('Username matches when provided (optional)', function () {",
+									"  if (jsonData && typeof jsonData === 'object' && 'username' in jsonData) {",
+									"    pm.expect(jsonData.username).to.be.a('string').and.not.empty;",
+									"  } else {",
+									"    pm.expect(true, 'no username in response, skipping').to.be.true;",
+									"  }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newuser\",\r\n  \"password\": \"newuser\",\r\n  \"role\": \"ROLE_USER\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new admin user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newadmin\",\r\n  \"password\": \"newadmin\",\r\n  \"role\": \"ROLE_admin\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Test templates",
+			"item": [
+				{
+					"name": "John login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('jane');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"john\",\n  \"password\": \"john\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Jane login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('jane');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"jane\",\n  \"password\": \"jane\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('admin');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all todos (current user)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('testuser');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all todos (admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('testuser');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new todo (current user)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('john');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"My First Todo\",\r\n    \"description\": \"This is a test todo\",\r\n    \"completed\": false\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get todo by Id (current user)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('testuser');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update todo by Id (current user)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('testuser');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Updated Todo Title\",\r\n    \"description\": \"Updated description\",\r\n    \"completed\": true\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete todo by Id (current user)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('testuser');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/todos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"testuser2\",\r\n  \"password\": \"password123\",\r\n  \"role\": \"ADMIN\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users (admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users by Id (admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users by username (admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/u/jane",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"u",
+								"jane"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user by id (admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"updated\",\r\n  \"password\": \"updated\",\r\n  \"role\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user profile (current user)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"updated\",\r\n  \"password\": \"updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updated login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('jane');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"updated\",\n  \"password\": \"updated\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('jane');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (current user)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.exist;",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});",
+									"",
+									"pm.test('Response contains username', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql('jane');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "todoId",
+			"value": ""
+		},
+		{
+			"key": "firstTodoId",
+			"value": ""
+		}
+	]
+}
